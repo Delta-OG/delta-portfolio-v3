@@ -27,7 +27,7 @@ export function DiscordStatus({ status }: DiscordStatusProps) {
         return "Idle"
       case "dnd":
         return "Do Not Disturb"
-      case "offline":
+      case "busy":
       default:
         return "Offline"
     }

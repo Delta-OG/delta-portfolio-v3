@@ -1,6 +1,6 @@
 ## 📄 README.md
 
-````markdown
+\`\`\``markdown
 # Delta Portfolio v3
 
 This is my personal portfolio built with Next.js and Tailwind CSS. It features a dynamic Discord status, social media links, and a modern, minimalist design.
@@ -35,22 +35,22 @@ This is my personal portfolio built with Next.js and Tailwind CSS. It features a
 ## 🔧 Setup
 
 1️⃣ Clone the repository:
-```bash
+\`\`\`bash
 git clone https://github.com/Delta-OG/delta-portfolio-v3.git
 cd delta-portfolio-v3
-````
+\`\`\``
 
 2️⃣ Install dependencies:
 
-```bash
+\`\`\`bash
 npm install
-```
+\`\`\`
 
 3️⃣ Run the development server:
 
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
@@ -61,10 +61,10 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 * **GitHub Pages** (static export) or **Vercel** recommended
 * To export as static HTML:
 
-  ```bash
+  \`\`\`bash
   npm run build
   npm run export
-  ```
+  \`\`\`
 
   Then deploy the `out` directory.
 
@@ -89,4 +89,4 @@ If you like this project, please give it a ⭐️ on GitHub!
 
 This project is licensed under the MIT License.
 
-```
+\`\`\`

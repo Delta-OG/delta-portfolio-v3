@@ -187,7 +187,7 @@ export function DebugPanel({ lanyardData, loading, error, connectionStatus, last
         <div>
           <p className="font-semibold text-purple-400">Current Mode:</p>
           <div className="bg-purple-900/20 p-2 rounded text-xs text-purple-200">
-            {error ? <p>🎭 Demo Mode - Showing realistic fallback data</p> : <p>🔴 Live Mode - Real Discord status</p>}
+            {error ? <p>🎭 DeMo Mode - Showing realistic fallback data</p> : <p>🔴 Live Mode - Real Discord status</p>}
           </div>
         </div>
       </CardContent>

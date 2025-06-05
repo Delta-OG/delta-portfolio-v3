@@ -221,7 +221,7 @@ export default function Portfolio() {
 
                 {/* Footer */}
                 <div className="pt-4 border-t border-white/20">
-                  <p className="text-xs text-white/60">Built with ❤️ using Next.js & Tailwind CSS</p>
+                  <p className="text-xs text-white/60">For More Information JOIN us In disc.gg/Demolab</p>
                   <div className="flex justify-center gap-4 mt-2 text-xs text-white/60">
                     <a
                       href="https://github.com/Delta-OG/delta-portfolio"
