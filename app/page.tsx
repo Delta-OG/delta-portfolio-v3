@@ -2,12 +2,28 @@
 
 import { useState, useEffect } from "react"
 import { ClockIcon, Github, Mail, MessageCircle, Twitter, Moon, Sun } from "lucide-react"
+import { useLanyard } from "@/hooks/use-lanyard"
+import { DiscordStatus } from "@/components/discord-status"
+import { DiscordActivity } from "@/components/discord-activity"
+import { DebugPanel } from "@/components/debug-panel"
 
 export default function Portfolio() {
   const [theme, setTheme] = useState<"light" | "dark">("dark")
   const [currentTimezoneIndex, setCurrentTimezoneIndex] = useState(0)
   const [currentTime, setCurrentTime] = useState("")
-  const [status, setStatus] = useState<"online" | "idle" | "dnd" | "offline">("online")
+
+  // Discord user ID
+  const DISCORD_USER_ID = "1330617292798562401"
+
+  // Use Lanyard hook to get real Discord data
+  const {
+    data: discordData,
+    loading,
+    error,
+    connectionStatus,
+    lastUpdated,
+    getElapsedTime,
+  } = useLanyard(DISCORD_USER_ID)
 
   // Timezones
   const timezones = [
@@ -53,43 +69,8 @@ export default function Portfolio() {
     setTheme(theme === "light" ? "dark" : "light")
   }
 
-  // Toggle status for demo
-  const toggleStatus = () => {
-    const statuses: Array<"online" | "idle" | "dnd" | "offline"> = ["online", "idle", "dnd", "offline"]
-    const currentIndex = statuses.indexOf(status)
-    const nextIndex = (currentIndex + 1) % statuses.length
-    setStatus(statuses[nextIndex])
-  }
-
-  // Get status color
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "online":
-        return "bg-green-500"
-      case "idle":
-        return "bg-yellow-500"
-      case "dnd":
-        return "bg-red-500"
-      case "offline":
-      default:
-        return "bg-gray-500"
-    }
-  }
-
-  // Get status text
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "online":
-        return "Online"
-      case "idle":
-        return "Away"
-      case "dnd":
-        return "Do Not Disturb"
-      case "offline":
-      default:
-        return "Offline"
-    }
-  }
+  // Get the main activity if available
+  const mainActivity = discordData?.activities?.find((activity) => activity.type === 0 || activity.type === 2)
 
   return (
     <div className={theme === "dark" ? "dark" : ""}>
@@ -134,13 +115,20 @@ export default function Portfolio() {
                     src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tswirtyeye%20circle.jpg-0Kk2zxuS9K8WYu1bnGeBxhg8jqf3AB.jpeg"
                     alt="Delta's Profile"
                     className="w-32 h-32 rounded-full object-cover border-4 border-white/30 shadow-xl ring-4 ring-purple-500/30 mx-auto"
-                    onClick={toggleStatus} // Click to toggle status for demo
                   />
                   {/* Discord-style status indicator */}
                   <div
-                    className={`absolute bottom-2 right-2 w-8 h-8 ${getStatusColor(
-                      status,
-                    )} rounded-full border-4 border-black shadow-lg`}
+                    className={`absolute bottom-2 right-2 w-8 h-8 rounded-full border-4 border-black shadow-lg ${
+                      loading
+                        ? "bg-gray-500"
+                        : discordData?.discord_status === "online"
+                          ? "bg-green-500"
+                          : discordData?.discord_status === "idle"
+                            ? "bg-yellow-500"
+                            : discordData?.discord_status === "dnd"
+                              ? "bg-red-500"
+                              : "bg-gray-500"
+                    }`}
                   />
                 </div>
 
@@ -153,24 +141,46 @@ export default function Portfolio() {
                 {/* Status Badge */}
                 <div className="flex justify-center">
                   <div className="px-3 py-1 bg-black/50 backdrop-blur-sm border border-white/20 rounded-full">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-3 h-3 rounded-full ${getStatusColor(status)} animate-pulse`} />
-                      <span className="text-sm font-medium text-white/80">{getStatusText(status)}</span>
-                    </div>
+                    {loading ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full bg-gray-500 animate-pulse" />
+                        <span className="text-sm font-medium text-white/80">Loading...</span>
+                      </div>
+                    ) : (
+                      <DiscordStatus status={discordData?.discord_status || "offline"} />
+                    )}
                   </div>
                 </div>
 
                 {/* Discord Info */}
                 <div className="space-y-2">
-                  <p className="text-sm text-white/70">@Delta</p>
+                  <p className="text-sm text-white/70">
+                    @{discordData?.discord_user?.username || "Delta"}
+                    {discordData?.discord_user?.discriminator !== "0" && `#${discordData?.discord_user?.discriminator}`}
+                  </p>
 
                   {/* Current Activity */}
-                  <div className="text-sm text-white/80 bg-black/30 rounded-lg p-3 backdrop-blur-sm border border-white/10">
-                    <p className="font-medium text-purple-300">Currently:</p>
-                    <p className="text-white">Visual Studio Code</p>
-                    <p className="text-xs text-white/60">Working on Portfolio</p>
-                    <p className="text-xs text-purple-300">TypeScript</p>
-                  </div>
+                  {loading ? (
+                    <div className="text-sm text-white/80 bg-black/30 rounded-lg p-3 backdrop-blur-sm border border-white/10">
+                      <p className="font-medium text-purple-300">Loading Discord status...</p>
+                      <div className="animate-pulse mt-2 space-y-2">
+                        <div className="h-4 bg-gray-700 rounded w-3/4"></div>
+                        <div className="h-3 bg-gray-700 rounded w-1/2"></div>
+                      </div>
+                    </div>
+                  ) : error ? (
+                    <div className="text-sm text-orange-300 bg-orange-900/20 rounded-lg p-3 backdrop-blur-sm border border-orange-500/20">
+                      <p className="font-medium">⚠️ Discord Not Connected</p>
+                      <p className="text-xs mt-1">Join discord.gg/lanyard to show real status</p>
+                    </div>
+                  ) : mainActivity ? (
+                    <DiscordActivity activity={mainActivity} elapsedTime={getElapsedTime(mainActivity)} />
+                  ) : (
+                    <div className="text-sm text-white/80 bg-black/30 rounded-lg p-3 backdrop-blur-sm border border-white/10">
+                      <p className="font-medium text-purple-300">Currently not playing anything</p>
+                      <p className="text-white text-xs mt-1">Discord status: {discordData?.discord_status}</p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Social Links */}
@@ -230,6 +240,15 @@ export default function Portfolio() {
               </div>
             </div>
           </main>
+
+          {/* Debug Panel */}
+          <DebugPanel
+            lanyardData={discordData}
+            loading={loading}
+            error={error}
+            connectionStatus={connectionStatus}
+            lastUpdated={lastUpdated}
+          />
         </div>
       </div>
     </div>
