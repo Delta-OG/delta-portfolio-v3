@@ -1,53 +1,24 @@
 "use client"
-import { useState, useCallback } from "react"
 import { useLanyard } from "@/hooks/use-lanyard"
 import { DiscordWidget } from "@/components/discord-widget"
-import { LastActivity } from "@/components/last-activity"
+import { SpotifyWidget } from "@/components/spotify-widget"
 import { SkillsSection } from "@/components/skills-section"
 import { QuickLinks } from "@/components/quick-links"
 import { CasablancaTime } from "@/components/casablanca-time"
 import { BirthdayCountdown } from "@/components/birthday-countdown"
-import { DemoFounders } from "@/components/demo-founders"
-import { SiteUpdateNotification } from "@/components/site-update-notification"
 
 export default function Portfolio() {
   // Discord user ID
   const DISCORD_USER_ID = "1330617292798562401"
-  const [currentAge, setCurrentAge] = useState(15)
-  const [showNotification, setShowNotification] = useState(true)
 
   // Use Lanyard hook to get real Discord data
-  const { data: discordData, loading, refetch } = useLanyard(DISCORD_USER_ID)
+  const { data: discordData, loading } = useLanyard(DISCORD_USER_ID)
 
-  const handleBirthdayComplete = useCallback(() => {
-    setCurrentAge(16)
-  }, [])
-
-  const handleRefresh = useCallback(() => {
-    refetch?.()
-  }, [refetch])
-
-  // Get status color for profile picture indicator
-  const getProfileStatusColor = () => {
-    if (!discordData) return "bg-gray-500"
-
-    switch (discordData.discord_status) {
-      case "online":
-        return "bg-green-500 shadow-lg shadow-green-500/50"
-      case "idle":
-        return "bg-yellow-500 shadow-lg shadow-yellow-500/50"
-      case "dnd":
-        return "bg-red-500 shadow-lg shadow-red-500/50"
-      default:
-        return "bg-gray-500 shadow-lg shadow-gray-500/50"
-    }
-  }
+  // Extract Spotify data from Discord activities
+  const spotifyData = discordData?.listening_to_spotify ? discordData.spotify : null
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
-      {/* Site Update Notification */}
-      {showNotification && <SiteUpdateNotification onClose={() => setShowNotification(false)} />}
-
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -57,9 +28,7 @@ export default function Portfolio() {
               alt="Delta's Profile"
               className="w-24 h-24 rounded-full object-cover border-4 border-gray-600 mx-auto mb-4"
             />
-            <div
-              className={`absolute bottom-2 right-2 w-6 h-6 rounded-full border-4 border-gray-900 animate-pulse ${getProfileStatusColor()}`}
-            ></div>
+            <div className="absolute bottom-2 right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-gray-900 shadow-lg shadow-green-500/50 animate-pulse"></div>
           </div>
 
           <h1 className="text-4xl font-bold text-white mb-2">Delta</h1>
@@ -72,7 +41,7 @@ export default function Portfolio() {
             </div>
             <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg px-4 py-2">
               <div className="text-gray-400 text-xs uppercase tracking-wide">Age</div>
-              <div className="text-white font-semibold">{currentAge}</div>
+              <div className="text-white font-semibold">15</div>
             </div>
           </div>
 
@@ -86,20 +55,31 @@ export default function Portfolio() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column */}
           <div className="space-y-6">
-            <DiscordWidget data={discordData} loading={loading} onRefresh={handleRefresh} />
+            <DiscordWidget data={discordData} loading={loading} />
             <SkillsSection />
           </div>
 
           {/* Middle Column */}
           <div className="space-y-6">
-            <LastActivity data={discordData} loading={loading} />
+            <SpotifyWidget
+              track={
+                spotifyData
+                  ? {
+                      name: spotifyData.song,
+                      artist: spotifyData.artist,
+                      album_art_url: spotifyData.album_art_url,
+                      timestamps: spotifyData.timestamps,
+                    }
+                  : null
+              }
+              isPlaying={discordData?.listening_to_spotify}
+            />
             <QuickLinks />
           </div>
 
           {/* Right Column */}
           <div className="space-y-6">
-            <BirthdayCountdown onBirthdayComplete={handleBirthdayComplete} />
-            <DemoFounders />
+            <BirthdayCountdown />
           </div>
         </div>
 
