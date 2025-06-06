@@ -1,18 +1,18 @@
 "use client"
 
 import { useMultipleLanyard } from "@/hooks/use-multiple-lanyard"
-import { Crown, ExternalLink, Sparkles, Heart } from "lucide-react"
+import { Crown, ExternalLink, Heart } from "lucide-react"
 
 const founders = [
   {
-    id: "1015561031545798666",
+    id: "1330617292798562401", // Delta is the Chairman
     role: "Chairman",
     icon: Crown,
     color: "text-purple-400",
     bgColor: "bg-gradient-to-r from-purple-500/20 to-pink-500/20",
     borderColor: "border-purple-500/30",
-    fallbackName: "DeMo Chairman",
-    fallbackUsername: "chairman",
+    fallbackName: "Delta",
+    fallbackUsername: "deltaexe",
     hasNitro: true,
     discordLink: "https://discord.gg/tPnNJDxE9c",
   },
@@ -46,6 +46,28 @@ export function DemoFounders() {
     }
   }
 
+  const getNitroEffect = (founderId: string) => {
+    if (founderId === "1330617292798562401") {
+      // Delta's Chairman Nitro effect - Purple/Gold
+      return {
+        background: "bg-gradient-to-br from-purple-600/20 via-yellow-500/10 to-purple-800/20",
+        border: "border-purple-400/60",
+        glow: "shadow-lg shadow-purple-500/30",
+        animation: "animate-pulse",
+        nitroRing: "ring-2 ring-purple-400/50 ring-offset-2 ring-offset-gray-900",
+      }
+    } else {
+      // Friend's Nitro effect - Pink/Blue
+      return {
+        background: "bg-gradient-to-br from-pink-500/20 via-blue-500/10 to-pink-600/20",
+        border: "border-pink-400/60",
+        glow: "shadow-lg shadow-pink-500/30",
+        animation: "animate-pulse",
+        nitroRing: "ring-2 ring-pink-400/50 ring-offset-2 ring-offset-gray-900",
+      }
+    }
+  }
+
   return (
     <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
       <div className="flex items-center gap-3 mb-4">
@@ -58,7 +80,7 @@ export function DemoFounders() {
           const userData = data[founder.id]
           const Icon = founder.icon
           const isLoading = loading
-          const hasError = error && !userData
+          const nitroEffect = getNitroEffect(founder.id)
 
           return (
             <a
@@ -66,20 +88,16 @@ export function DemoFounders() {
               href={founder.discordLink}
               target="_blank"
               rel="noopener noreferrer"
-              className={`block border rounded-lg p-4 transition-all duration-200 group relative overflow-hidden ${
-                founder.hasNitro
-                  ? "bg-gradient-to-r from-purple-900/30 via-pink-900/30 to-purple-900/30 border-purple-500/50 hover:border-purple-400/70"
-                  : "bg-gray-700/30 hover:bg-gray-700/50 border-gray-600/50"
-              }`}
+              className={`block border rounded-lg p-4 transition-all duration-300 group relative overflow-hidden hover:scale-[1.02] ${nitroEffect.background} ${nitroEffect.border} ${nitroEffect.glow}`}
             >
-              {/* Nitro animated background */}
-              {founder.hasNitro && (
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 via-pink-600/10 to-purple-600/10 animate-pulse"></div>
-              )}
+              {/* Discord Nitro animated background effect */}
+              <div className={`absolute inset-0 opacity-30 ${nitroEffect.animation}`}>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+              </div>
 
               <div className="relative flex items-center gap-3">
                 <div className="relative">
-                  <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-purple-500/50">
+                  <div className={`w-12 h-12 rounded-full overflow-hidden flex-shrink-0 ${nitroEffect.nitroRing}`}>
                     {isLoading ? (
                       <div className="w-full h-full bg-gray-600 animate-pulse flex items-center justify-center">
                         <div className="w-8 h-8 bg-gray-500 rounded-full"></div>
@@ -108,11 +126,12 @@ export function DemoFounders() {
                       className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-gray-700 ${getStatusColor(userData.discord_status)}`}
                     ></div>
                   )}
-                  {founder.hasNitro && (
-                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
-                      <Sparkles className="w-3 h-3 text-white" />
-                    </div>
-                  )}
+                  {/* Nitro badge without text */}
+                  <div
+                    className={`absolute -top-1 -left-1 w-5 h-5 rounded-full flex items-center justify-center ${founder.id === "1330617292798562401" ? "bg-gradient-to-r from-purple-500 to-yellow-500" : "bg-gradient-to-r from-pink-500 to-blue-500"}`}
+                  >
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
                 </div>
 
                 <div className="flex-1 min-w-0">
@@ -138,12 +157,6 @@ export function DemoFounders() {
                         ? `@${userData.discord_user.username}`
                         : `@${founder.fallbackUsername}`}
                   </p>
-                  {founder.hasNitro && (
-                    <div className="flex items-center gap-1 mt-1">
-                      <Sparkles className="w-3 h-3 text-purple-400" />
-                      <span className="text-purple-400 text-xs font-medium">Nitro</span>
-                    </div>
-                  )}
                 </div>
 
                 <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors" />

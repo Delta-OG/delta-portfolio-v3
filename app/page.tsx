@@ -8,11 +8,13 @@ import { QuickLinks } from "@/components/quick-links"
 import { CasablancaTime } from "@/components/casablanca-time"
 import { BirthdayCountdown } from "@/components/birthday-countdown"
 import { DemoFounders } from "@/components/demo-founders"
+import { SiteUpdateNotification } from "@/components/site-update-notification"
 
 export default function Portfolio() {
   // Discord user ID
   const DISCORD_USER_ID = "1330617292798562401"
   const [currentAge, setCurrentAge] = useState(15)
+  const [showNotification, setShowNotification] = useState(true)
 
   // Use Lanyard hook to get real Discord data
   const { data: discordData, loading, refetch } = useLanyard(DISCORD_USER_ID)
@@ -43,6 +45,9 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
+      {/* Site Update Notification */}
+      {showNotification && <SiteUpdateNotification onClose={() => setShowNotification(false)} />}
+
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">

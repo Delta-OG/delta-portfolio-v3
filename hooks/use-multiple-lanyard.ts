@@ -65,12 +65,8 @@ export function useMultipleLanyard(userIds: string[]) {
     }
 
     if (userIds.length > 0) {
+      // Only fetch once, no auto-refresh to prevent glitching
       fetchMultipleUsers()
-
-      // Refresh every 90 seconds (1.5 minutes)
-      const interval = setInterval(fetchMultipleUsers, 90000)
-
-      return () => clearInterval(interval)
     }
   }, [userIds])
 
