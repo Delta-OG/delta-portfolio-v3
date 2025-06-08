@@ -1,7 +1,13 @@
 "use client"
 
-import { useMemo } from "react"
-import Beams from "./beams"
+import { useMemo, useState, useEffect } from "react"
+import dynamic from "next/dynamic"
+
+// Dynamically import Beams with no SSR
+const Beams = dynamic(() => import("./beams"), {
+  ssr: false,
+  loading: () => <div className="fixed inset-0 w-full h-full opacity-30 pointer-events-none bg-black" />,
+})
 
 interface DynamicBackgroundProps {
   isOnline: boolean
@@ -9,6 +15,13 @@ interface DynamicBackgroundProps {
 }
 
 export function DynamicBackground({ isOnline, isSpotifyPlaying }: DynamicBackgroundProps) {
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Only render on client side
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   // Determine background color based on priority rules
   const backgroundConfig = useMemo(() => {
     // Spotify status has priority over Discord status
@@ -42,6 +55,11 @@ export function DynamicBackground({ isOnline, isSpotifyPlaying }: DynamicBackgro
       }
     }
   }, [isOnline, isSpotifyPlaying])
+
+  // Don't render anything on server side
+  if (!isMounted) {
+    return <div className="fixed inset-0 w-full h-full opacity-30 pointer-events-none bg-black" />
+  }
 
   return (
     <div className="fixed inset-0 w-full h-full opacity-30 pointer-events-none">

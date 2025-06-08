@@ -52,11 +52,19 @@ function extendMaterial(BaseMaterial: any, cfg: any) {
   return mat
 }
 
-const CanvasWrapper = ({ children }: { children: React.ReactNode }) => (
-  <Canvas dpr={[1, 2]} frameloop="always" className="w-full h-full absolute inset-0">
-    {children}
-  </Canvas>
-)
+const CanvasWrapper = ({ children }: { children: React.ReactNode }) => {
+  // Add error boundary for Three.js
+  try {
+    return (
+      <Canvas dpr={[1, 2]} frameloop="always" className="w-full h-full absolute inset-0">
+        {children}
+      </Canvas>
+    )
+  } catch (error) {
+    console.error("Three.js Canvas error:", error)
+    return <div className="w-full h-full absolute inset-0 bg-black" />
+  }
+}
 
 const hexToNormalizedRGB = (hex: string) => {
   const clean = hex.replace("#", "")
@@ -165,9 +173,10 @@ const Beams = ({
   rotation = 0,
 }: BeamsProps) => {
   const meshRef = useRef<THREE.Mesh>(null)
-  const beamMaterial = useMemo(
-    () =>
-      extendMaterial(THREE.MeshStandardMaterial, {
+
+  const beamMaterial = useMemo(() => {
+    try {
+      return extendMaterial(THREE.MeshStandardMaterial, {
         header: `
   varying vec3 vEye;
   varying float vNoise;
@@ -218,9 +227,12 @@ const Beams = ({
           uNoiseIntensity: noiseIntensity,
           uScale: scale,
         },
-      }),
-    [speed, noiseIntensity, scale],
-  )
+      })
+    } catch (error) {
+      console.error("Error creating beam material:", error)
+      return new THREE.MeshBasicMaterial({ color: "#000000" })
+    }
+  }, [speed, noiseIntensity, scale])
 
   return (
     <CanvasWrapper>
