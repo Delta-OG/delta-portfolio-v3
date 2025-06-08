@@ -1,6 +1,6 @@
 "use client"
 
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { getBlogPost, getBlogPosts } from "@/lib/blog-data"
 import { BlogPostContent } from "@/components/blog-post-content"
 import { BlogPostHeader } from "@/components/blog-post-header"
@@ -11,7 +11,6 @@ import Link from "next/link"
 
 export default function BlogPostPageClient() {
   const params = useParams()
-  const router = useRouter()
   const slug = params.slug as string
 
   const post = getBlogPost(slug)

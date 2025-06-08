@@ -1,5 +1,4 @@
-"use client"
-
+// Remove "use client" directive to make this work on both server and client
 export interface BlogPost {
   id: string
   title: string
