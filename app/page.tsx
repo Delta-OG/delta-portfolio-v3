@@ -7,7 +7,7 @@ import { SiteUpdateNotification } from "@/components/site-update-notification"
 import { SpotifyWidgetV23 } from "@/components/spotify-widget-v23"
 import { ActivityWidgetV23 } from "@/components/activity-widget-v23"
 import { SkillsSectionEnhanced } from "@/components/skills-section-enhanced"
-import { DynamicBackground } from "@/components/dynamic-background"
+import { StaticBackground } from "@/components/static-background"
 import { Clock, BookOpen } from "lucide-react"
 import Link from "next/link"
 
@@ -86,8 +86,8 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen relative bg-black">
-      {/* Dynamic Animated Background */}
-      <DynamicBackground isOnline={isDiscordOnline} isSpotifyPlaying={isSpotifyPlaying} />
+      {/* Static CSS Background - No Three.js */}
+      <StaticBackground isOnline={isDiscordOnline} isSpotifyPlaying={isSpotifyPlaying} />
 
       {/* Content Overlay */}
       <div className="relative z-10 min-h-screen p-4">
