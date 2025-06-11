@@ -9,10 +9,13 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Remove static export for now to allow dynamic routes
-  // We can add it back later if needed for specific deployment targets
+  // Simplified configuration for better deployment compatibility
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
+  // Disable experimental features that might cause issues
+  experimental: {
+    optimizePackageImports: [],
+  },
 }
 
 export default nextConfig

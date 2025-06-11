@@ -1,9 +1,6 @@
 "use client"
 
-import { useState } from "react"
-
-import type React from "react"
-import { forwardRef, useImperativeHandle, useEffect, useRef, useMemo, Suspense } from "react"
+import React, { forwardRef, useImperativeHandle, useEffect, useRef, useMemo, Suspense } from "react"
 
 // Lazy load Three.js components to prevent SSR issues
 let THREE: typeof import("three") | null = null
@@ -223,14 +220,9 @@ const Beams = ({
   rotation = 0,
 }: BeamsProps) => {
   const meshRef = useRef<any>(null)
-  const [threeLoaded, setThreeLoaded] = useState(false)
-
-  useEffect(() => {
-    loadThreeJS().then(setThreeLoaded)
-  }, [])
 
   const beamMaterial = useMemo(() => {
-    if (!THREE || !threeLoaded) return null
+    if (!THREE) return null
 
     try {
       return extendMaterial(THREE.MeshStandardMaterial, {
@@ -288,10 +280,10 @@ gl_FragColor.rgb -= randomNoise / 15. * uNoiseIntensity;`,
       console.error("Error creating beam material:", error)
       return null
     }
-  }, [speed, noiseIntensity, scale, threeLoaded])
+  }, [speed, noiseIntensity, scale])
 
-  if (!threeLoaded || !beamMaterial) {
-    return <div className="w-full h-full absolute inset-0 bg-black" />
+  if (!beamMaterial) {
+    return null
   }
 
   return (
@@ -439,4 +431,16 @@ const DirLight = ({ position, color }: DirLightProps) => {
   return <directionalLight ref={dir} color={color} intensity={1} position={position} />
 }
 
-export default Beams
+export default function BeamsBackground(props: BeamsProps) {
+  const [threeLoaded, setThreeLoaded] = React.useState(false)
+
+  React.useEffect(() => {
+    loadThreeJS().then(setThreeLoaded)
+  }, [])
+
+  if (!threeLoaded) {
+    return <div className="w-full h-full absolute inset-0 bg-black" />
+  }
+
+  return <Beams {...props} />
+}

@@ -22,30 +22,30 @@ export function SiteUpdateNotification({ onClose }: SiteUpdateNotificationProps)
   const updates = [
     {
       id: 1,
-      title: "Discord Nitro Effects",
-      description: "Added special Nitro effects for founders with custom animations",
+      title: "API Error Fixes",
+      description: "Fixed deployment issues and improved error handling for all API calls",
       date: "Today",
-      icon: <Sparkles className="w-4 h-4 text-purple-400" />,
+      icon: <CheckCircle2 className="w-4 h-4 text-green-400" />,
     },
     {
       id: 2,
-      title: "Chairman Badge",
-      description: "Updated the Chairman badge with new design and animations",
+      title: "Simplified Architecture",
+      description: "Removed blog section and streamlined the application for better performance",
       date: "Today",
       icon: <CheckCircle2 className="w-4 h-4 text-blue-400" />,
     },
     {
       id: 3,
-      title: "Spotify Integration",
-      description: "Enhanced Spotify widget with real-time lyrics display",
-      date: "Yesterday",
-      icon: <CheckCircle2 className="w-4 h-4 text-green-400" />,
+      title: "Enhanced Fallback Data",
+      description: "Added robust fallback systems for when external APIs are unavailable",
+      date: "Today",
+      icon: <CheckCircle2 className="w-4 h-4 text-purple-400" />,
     },
     {
       id: 4,
-      title: "Skills Section",
-      description: "Added toggle functionality to skills section with real platform icons",
-      date: "Yesterday",
+      title: "Improved Error Handling",
+      description: "Better error boundaries and graceful degradation for all components",
+      date: "Today",
       icon: <CheckCircle2 className="w-4 h-4 text-yellow-400" />,
     },
   ]
@@ -55,7 +55,7 @@ export function SiteUpdateNotification({ onClose }: SiteUpdateNotificationProps)
       id: 1,
       title: "Projects Section",
       description: "Showcase portfolio projects with descriptions and links",
-      status: "In Progress",
+      status: "Planned",
     },
     {
       id: 2,
@@ -65,9 +65,9 @@ export function SiteUpdateNotification({ onClose }: SiteUpdateNotificationProps)
     },
     {
       id: 3,
-      title: "Blog Integration",
-      description: "Personal blog with articles about coding and design",
-      status: "Planned",
+      title: "Performance Optimization",
+      description: "Further optimize loading times and user experience",
+      status: "In Progress",
     },
   ]
 
@@ -83,7 +83,7 @@ export function SiteUpdateNotification({ onClose }: SiteUpdateNotificationProps)
         <div className="flex items-center justify-between p-4 border-b border-gray-800">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-purple-400" />
-            <h3 className="text-white font-semibold">What we do today</h3>
+            <h3 className="text-white font-semibold">Latest Updates</h3>
           </div>
           <Button variant="ghost" size="sm" onClick={handleClose} className="h-8 w-8 p-0">
             <X className="w-4 h-4 text-gray-400" />
