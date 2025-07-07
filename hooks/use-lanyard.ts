@@ -53,6 +53,7 @@ export function useLanyard(userId: string) {
   const [connectionStatus, setConnectionStatus] = useState<"connecting" | "connected" | "disconnected">("connecting")
 
   const previousDataRef = useRef<LanyardData | null>(null)
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   // Generate realistic fallback data
   const generateFallbackData = useCallback((): LanyardData => {
@@ -142,19 +143,38 @@ export function useLanyard(userId: string) {
       setConnectionStatus("connecting")
       console.log(`Fetching Lanyard data for user: ${userId}`)
 
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 8000) // 8 second timeout
+      // Cancel previous request if it exists
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
 
-      const response = await fetch(`https://api.lanyard.rest/v1/users/${userId}`, {
+      // Create new abort controller
+      abortControllerRef.current = new AbortController()
+      const signal = abortControllerRef.current.signal
+
+      // Set a timeout that doesn't use AbortController
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("Request timeout")), 6000)
+      })
+
+      // Create the fetch promise
+      const fetchPromise = fetch(`https://api.lanyard.rest/v1/users/${userId}`, {
         method: "GET",
         headers: {
           Accept: "application/json",
           "User-Agent": "Delta-Portfolio/1.0",
         },
-        signal: controller.signal,
+        signal,
       })
 
-      clearTimeout(timeoutId)
+      // Race between fetch and timeout
+      const response = (await Promise.race([fetchPromise, timeoutPromise])) as Response
+
+      // Check if request was aborted
+      if (signal.aborted) {
+        console.log("Request was aborted")
+        return
+      }
 
       console.log(`Lanyard API response status: ${response.status}`)
 
@@ -194,11 +214,29 @@ export function useLanyard(userId: string) {
         throw new Error(result.error?.message || "Invalid API response")
       }
     } catch (err) {
+      // Don't log abort errors as they're expected
+      if (err instanceof Error && err.name === "AbortError") {
+        console.log("Request was aborted (expected)")
+        return
+      }
+
       console.error("Error fetching Lanyard data:", err)
 
       // Use fallback data instead of showing error
       setData(generateFallbackData())
-      setError("Demo mode - API unavailable")
+
+      if (err instanceof Error) {
+        if (err.message === "Request timeout") {
+          setError("Demo mode - API timeout")
+        } else if (err.message.includes("Failed to fetch")) {
+          setError("Demo mode - Network error")
+        } else {
+          setError("Demo mode - API unavailable")
+        }
+      } else {
+        setError("Demo mode - Unknown error")
+      }
+
       setConnectionStatus("disconnected")
       setLastUpdated(new Date())
     } finally {
@@ -209,11 +247,31 @@ export function useLanyard(userId: string) {
   useEffect(() => {
     fetchData()
 
-    // Auto-refresh every 15 seconds for more dynamic updates
-    const interval = setInterval(fetchData, 15000)
+    // Auto-refresh every 20 seconds for more dynamic updates
+    const interval = setInterval(() => {
+      // Only fetch if not currently loading
+      if (!loading) {
+        fetchData()
+      }
+    }, 20000)
 
-    return () => clearInterval(interval)
+    // Cleanup function
+    return () => {
+      clearInterval(interval)
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+    }
   }, [fetchData])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+    }
+  }, [])
 
   // Format elapsed time for activities
   const getElapsedTime = (activity: LanyardActivity | undefined) => {

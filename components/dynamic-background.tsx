@@ -11,10 +11,9 @@ const BeamsBackground = dynamic(() => import("./beams"), {
 
 interface DynamicBackgroundProps {
   isDiscordOnline: boolean
-  isSpotifyPlaying: boolean
 }
 
-export function DynamicBackground({ isDiscordOnline, isSpotifyPlaying }: DynamicBackgroundProps) {
+export function DynamicBackground({ isDiscordOnline }: DynamicBackgroundProps) {
   const [isMounted, setIsMounted] = useState(false)
   const [hasWebGL, setHasWebGL] = useState(false)
 
@@ -32,21 +31,9 @@ export function DynamicBackground({ isDiscordOnline, isSpotifyPlaying }: Dynamic
     }
   }, [])
 
-  // Determine background configuration based on status
+  // Determine background configuration based on Discord status
   const backgroundConfig = useMemo(() => {
-    // Priority: Spotify > Discord > Offline
-    if (isSpotifyPlaying) {
-      return {
-        lightColor: "#00ff88", // Green for Spotify
-        beamNumber: 18,
-        speed: 3.0,
-        noiseIntensity: 2.2,
-        scale: 0.3,
-        rotation: 20,
-        fallbackColor: "from-green-900/30 via-green-700/20 to-emerald-600/30",
-        description: "Spotify Playing",
-      }
-    } else if (isDiscordOnline) {
+    if (isDiscordOnline) {
       return {
         lightColor: "#5865f2", // Discord blue
         beamNumber: 15,
@@ -69,7 +56,7 @@ export function DynamicBackground({ isDiscordOnline, isSpotifyPlaying }: Dynamic
         description: "Offline",
       }
     }
-  }, [isDiscordOnline, isSpotifyPlaying])
+  }, [isDiscordOnline])
 
   // Don't render anything on server side
   if (!isMounted) {

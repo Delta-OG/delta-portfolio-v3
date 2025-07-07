@@ -5,6 +5,7 @@ import type { LanyardData } from "@/hooks/use-lanyard"
 import { SpotlightCard } from "./spotlight-card"
 import { PlatformIcons } from "./platform-icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { DiscordBadges } from "./discord-badges"
 
 interface DiscordWidgetProps {
   data?: LanyardData | null
@@ -105,6 +106,9 @@ export function DiscordWidget({ data, loading, isOnline = false }: DiscordWidget
         <PlatformIcons.Discord className="w-5 h-5 text-blue-400" />
         <span className="text-blue-400 text-sm font-medium">Discord</span>
         <div className="flex items-center gap-2 ml-auto">
+          {mainActivity?.name.toLowerCase().includes("discord") && (
+            <img src="/images/discord-js-logo.png" alt="Discord.js" className="w-4 h-4" title="Discord.js Developer" />
+          )}
           <div className={`w-2 h-2 rounded-full ${getStatusColor()} animate-pulse`}></div>
         </div>
       </div>
@@ -123,9 +127,18 @@ export function DiscordWidget({ data, loading, isOnline = false }: DiscordWidget
         </Avatar>
 
         <div className="flex-1 min-w-0">
-          <p className="text-foreground font-medium text-sm truncate">
-            {data.discord_user.global_name || data.discord_user.username}
-          </p>
+          <div className="flex items-center gap-2">
+            <p className="text-foreground font-medium text-sm truncate">
+              {data.discord_user.global_name || data.discord_user.username}
+            </p>
+            <img
+              src="/images/developer-badge.png"
+              alt="Developer"
+              className="w-4 h-4 opacity-80"
+              title="Discord.js Developer"
+            />
+            <DiscordBadges size="sm" />
+          </div>
           <p className="text-muted-foreground text-xs">{getStatusText()}</p>
         </div>
       </div>

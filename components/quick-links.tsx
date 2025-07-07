@@ -26,8 +26,8 @@ export function QuickLinks({ isOnline = false }: QuickLinksProps) {
       ),
     },
     {
-      name: "Twitter",
-      url: "https://twitter.com/vinxnzo",
+      name: "X (Twitter)",
+      url: "https://x.com/deltatalking",
       color: "hover:bg-blue-400/20 hover:border-blue-400/50",
       icon: (
         <svg className="w-6 h-6 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
@@ -36,8 +36,14 @@ export function QuickLinks({ isOnline = false }: QuickLinksProps) {
       ),
     },
     {
+      name: "Kick",
+      url: "https://kick.com/deltaexe",
+      color: "hover:bg-green-500/20 hover:border-green-500/50",
+      icon: <PlatformIcons.Kick className="w-6 h-6 text-green-400" />,
+    },
+    {
       name: "Email",
-      url: "mailto:abdessamadk77@gmail.com",
+      url: "mailto:DeMoNetwork.contact@gmail.com",
       color: "hover:bg-red-500/20 hover:border-red-500/50",
       icon: (
         <svg className="w-6 h-6 text-red-400" viewBox="0 0 24 24" fill="currentColor">
@@ -70,14 +76,14 @@ export function QuickLinks({ isOnline = false }: QuickLinksProps) {
         <span className="text-white font-medium">Quick Links</span>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3">
         {links.map((link) => (
           <a
             key={link.name}
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`bg-gray-700/30 border border-gray-600/50 rounded-lg p-4 flex flex-col items-center gap-2 transition-all duration-200 ${link.color}`}
+            className={`bg-gray-700/30 border border-gray-600/50 rounded-lg p-3 flex items-center gap-3 transition-all duration-200 ${link.color}`}
           >
             <div className="text-gray-300">{link.icon}</div>
             <span className="text-gray-300 text-sm font-medium">{link.name}</span>

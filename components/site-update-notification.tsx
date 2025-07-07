@@ -22,52 +22,71 @@ export function SiteUpdateNotification({ onClose }: SiteUpdateNotificationProps)
   const updates = [
     {
       id: 1,
-      title: "API Error Fixes",
-      description: "Fixed deployment issues and improved error handling for all API calls",
-      date: "Today",
+      title: "CORS Error Fixed",
+      description: "Resolved Roblox API CORS issues with fallback system and proxy implementation",
+      date: "Just now",
       icon: <CheckCircle2 className="w-4 h-4 text-green-400" />,
     },
     {
       id: 2,
-      title: "Simplified Architecture",
-      description: "Removed blog section and streamlined the application for better performance",
+      title: "Dark Mode Toggle Restored",
+      description: "Re-enabled dark mode functionality with theme toggle in the header",
+      date: "Today",
+      icon: <CheckCircle2 className="w-4 h-4 text-green-400" />,
+    },
+    {
+      id: 3,
+      title: "Roblox Integration Enhanced",
+      description: "Updated Roblox widget with new user profile and robust error handling",
+      date: "Today",
+      icon: <CheckCircle2 className="w-4 h-4 text-green-400" />,
+    },
+    {
+      id: 4,
+      title: "Original Layout Restored",
+      description: "Reverted to the original design and layout with all previous features",
       date: "Today",
       icon: <CheckCircle2 className="w-4 h-4 text-blue-400" />,
     },
     {
-      id: 3,
-      title: "Enhanced Fallback Data",
-      description: "Added robust fallback systems for when external APIs are unavailable",
+      id: 5,
+      title: "Green Verification Badge",
+      description: "Added green verification badge next to the user's name",
       date: "Today",
       icon: <CheckCircle2 className="w-4 h-4 text-purple-400" />,
-    },
-    {
-      id: 4,
-      title: "Improved Error Handling",
-      description: "Better error boundaries and graceful degradation for all components",
-      date: "Today",
-      icon: <CheckCircle2 className="w-4 h-4 text-yellow-400" />,
     },
   ]
 
   const roadmap = [
     {
       id: 1,
+      title: "API Optimization",
+      description: "Implement server-side proxy for better API reliability",
+      status: "In Progress",
+    },
+    {
+      id: 2,
       title: "Projects Section",
       description: "Showcase portfolio projects with descriptions and links",
       status: "Planned",
     },
     {
-      id: 2,
+      id: 3,
       title: "Contact Form",
       description: "Add a contact form for direct communication",
       status: "Planned",
     },
     {
-      id: 3,
+      id: 4,
       title: "Performance Optimization",
       description: "Further optimize loading times and user experience",
       status: "In Progress",
+    },
+    {
+      id: 5,
+      title: "Mobile App",
+      description: "Develop a mobile companion app for the portfolio",
+      status: "Future",
     },
   ]
 
@@ -148,7 +167,9 @@ export function SiteUpdateNotification({ onClose }: SiteUpdateNotificationProps)
                           className={`text-xs px-2 py-0.5 rounded-full ${
                             item.status === "In Progress"
                               ? "bg-blue-900/50 text-blue-400"
-                              : "bg-purple-900/50 text-purple-400"
+                              : item.status === "Future"
+                                ? "bg-gray-900/50 text-gray-400"
+                                : "bg-purple-900/50 text-purple-400"
                           }`}
                         >
                           {item.status}
@@ -166,7 +187,7 @@ export function SiteUpdateNotification({ onClose }: SiteUpdateNotificationProps)
         {/* Footer */}
         <div className="border-t border-gray-800 p-4">
           <div className="flex justify-end">
-            <Button variant="outline" size="sm" onClick={handleClose} className="text-xs">
+            <Button variant="outline" size="sm" onClick={handleClose} className="text-xs bg-transparent">
               Close
             </Button>
           </div>
