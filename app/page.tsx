@@ -12,6 +12,8 @@ import { VerifiedBadge } from "@/components/verified-badge"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { SiteUpdateNotification } from "@/components/site-update-notification"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
+import { X } from "lucide-react"
 // Remove the Sparkles import entirely
 
 export default function Portfolio() {
@@ -23,6 +25,7 @@ export default function Portfolio() {
 
   // State for updates notification
   const [showUpdates, setShowUpdates] = useState(false)
+  const [showFooterLinks, setShowFooterLinks] = useState(false)
 
   // Determine status for background and cards
   const isDiscordOnline =
@@ -124,8 +127,46 @@ export default function Portfolio() {
           <div className="mt-12 text-center">
             <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
               <span>💻</span>
-              <span>© 2024 - crafted with passion</span>
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <span
+                    className="cursor-pointer hover:text-foreground transition-colors"
+                    onClick={() => setShowFooterLinks(!showFooterLinks)}
+                  >
+                    @2025 - @DeMoNetWork
+                  </span>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-48">
+                  <p className="text-sm">Affiliated For Delta</p>
+                </HoverCardContent>
+              </HoverCard>
             </div>
+
+            {/* Expandable Links Section */}
+            {showFooterLinks && (
+              <div className="mt-4 p-4 bg-background/50 backdrop-blur-sm border border-border rounded-lg max-w-sm mx-auto">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-foreground font-medium text-sm">DeMo Network</h3>
+                  <button
+                    onClick={() => setShowFooterLinks(false)}
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                <a
+                  href="https://x.com/DeMoNerwork"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors"
+                >
+                  <svg className="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                  <span className="text-foreground text-sm">@DeMoNerwork</span>
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </div>
