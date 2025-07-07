@@ -46,9 +46,11 @@ export function QuickLinks({ isOnline = false }: QuickLinksProps) {
       url: "mailto:DeMoNetwork.contact@gmail.com",
       color: "hover:bg-red-500/20 hover:border-red-500/50",
       icon: (
-        <svg className="w-6 h-6 text-red-400" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-        </svg>
+        <img
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icons8-gmail-480-GiHFCk5SxHpKsVrYPFZlXUVpu9ZVVz.png"
+          alt="Gmail"
+          className="w-6 h-6"
+        />
       ),
     },
   ]
