@@ -37,13 +37,13 @@ export function QuickLinks({ isOnline = false }: QuickLinksProps) {
     },
     {
       name: "Kick",
-      url: "https://kick.com/deltaexe",
+      url: "https://kick.com/deltastreaming",
       color: "hover:bg-green-500/20 hover:border-green-500/50",
       icon: <PlatformIcons.Kick className="w-6 h-6 text-green-400" />,
     },
     {
       name: "Email",
-      url: "mailto:DeMoNetwork.contact@gmail.com",
+      url: "DeMoNetwork.contact@gmail.com",
       color: "hover:bg-red-500/20 hover:border-red-500/50",
       icon: (
         <img
@@ -74,7 +74,7 @@ export function QuickLinks({ isOnline = false }: QuickLinksProps) {
   return (
     <SpotlightCard className="p-4" spotlightColor={getSpotlightColor()} borderColor={getBorderColor()}>
       <div className="flex items-center gap-3 mb-4">
-        <span className="text-yellow-400">⭐</span>
+        <img src="/images/quicklinks-icon.png" alt="Quick Links" className="w-5 h-5" />
         <span className="text-white font-medium">Quick Links</span>
       </div>
 

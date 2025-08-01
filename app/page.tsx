@@ -14,7 +14,7 @@ import { SiteUpdateNotification } from "@/components/site-update-notification"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { X } from "lucide-react"
-// Remove the Sparkles import entirely
+import { ProjectsSection } from "@/components/projects-section"
 
 export default function Portfolio() {
   // Discord user ID
@@ -115,6 +115,7 @@ export default function Portfolio() {
             <div className="space-y-6">
               <DiscordActivity data={discordData} loading={discordLoading} isOnline={isDiscordOnline} />
               <SkillsSectionEnhanced isOnline={isDiscordOnline} />
+              <ProjectsSection isOnline={isDiscordOnline} />
             </div>
 
             {/* Right Column */}
